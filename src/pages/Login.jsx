@@ -25,8 +25,7 @@ const Login = () => {
         <Input type="submit" value="Login" />
       </Form>
       <Switcher>
-        계정이 없으신가요?
-        <Link to="/create-account"> 회원가입 &rarr;</Link>
+        계정이 없으신가요? <Link to="/create-account">회원가입 &rarr;</Link>
       </Switcher>
     </Wrapper>
   );
@@ -35,8 +34,10 @@ const Login = () => {
 export default Login;
 
 const Switcher = styled.span`
-  text-align: center;
-  margin: 10px;
+  a {
+    color: #1d9bf5;
+  }
+  margin-top: 10px;
 `;
 
 const Title = styled.h1`
