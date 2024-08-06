@@ -1,14 +1,31 @@
 import { useState } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Router, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import Home from "./pages/Home";
+import CreateAccount from "./pages/CreateAccount";
+
+const router = createBrowserRouter([
+  {
+    path: "",
+    element: <Home />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/create-account",
+    element: <CreateAccount />,
+  },
+]);
 
 function App() {
   return (
     <Wrapper>
       <GlobalStyles />
-      <Login />
+      <RouterProvider router={router} />
     </Wrapper>
   );
 }

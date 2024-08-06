@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+const CreateAccount = () => {
   return (
     <Wrapper>
-      <Title>Log in</Title>
+      <Title>Join</Title>
       <Form>
         <Input
           // onChange={onChange}
@@ -22,21 +22,21 @@ const Login = () => {
           type="password"
           required
         />
-        <Input type="submit" value="Login" />
+        <Input type="submit" value="Create" />
       </Form>
       <Switcher>
-        계정이 없으신가요?
-        <Link to="/create-account"> 회원가입 &rarr;</Link>
+        이미 계정이 있으신가요? <Link to="/">로그인 &rarr;</Link>
       </Switcher>
     </Wrapper>
   );
 };
-
-export default Login;
+export default CreateAccount;
 
 const Switcher = styled.span`
-  text-align: center;
-  margin: 10px;
+  margin-top: 10px;
+  a {
+    color: #1d9bf5;
+  }
 `;
 
 const Title = styled.h1`
