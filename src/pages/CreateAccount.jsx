@@ -1,28 +1,75 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { signUp } from "../utils/apis/auth";
+import { Cookie } from "../utils/function/cookie";
 
 const CreateAccount = () => {
+  const [data, setData] = useState({
+    account_id: "",
+    password: "",
+    phone: "",
+  });
+  const link = useNavigate();
+  const onSignUp = async () => {
+    try {
+      const res = await signUp(data);
+      link("/login");
+      Cookie.set("accessToken", res.data.accessToken);
+    } catch (err) {
+      alert("회원가입에 실패했습니다.");
+      console.log(err);
+      resetValue();
+    }
+  };
+  const { account_id, password, phone } = data;
+
+  const onChange = e => {
+    let { name, value } = e.target;
+
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const resetValue = () => {
+    setData({
+      account_id: "",
+      password: "",
+      phone: "",
+    });
+  };
+
   return (
     <Wrapper>
       <Title>Join</Title>
       <Form>
         <Input
-          // onChange={onChange}
-          name="id"
-          // value={email}
+          onChange={onChange}
+          name="account_id"
+          value={account_id}
           placeholder="ID"
           type="text"
           required
         />
         <Input
-          // onChange={onChange}
+          onChange={onChange}
           name="password"
-          // value={password}
+          value={password}
           placeholder="Password"
           type="password"
           required
         />
-        <Input type="submit" value="Create" />
+        <Input
+          onChange={onChange}
+          name="phone"
+          value={phone}
+          placeholder="Phone"
+          type="phone"
+          required
+        />
+        <SignUpBtn onClick={onSignUp}>SignUp</SignUpBtn>
       </Form>
       <Switcher>
         이미 계정이 있으신가요? <Link to="/login">로그인 &rarr;</Link>
@@ -36,6 +83,18 @@ const Switcher = styled.span`
   margin-top: 10px;
   a {
     color: #1d9bf5;
+  }
+`;
+
+const SignUpBtn = styled.button`
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
   }
 `;
 
@@ -68,10 +127,4 @@ const Input = styled.input`
   border: none;
   width: 100%;
   font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 `;

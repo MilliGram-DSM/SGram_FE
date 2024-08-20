@@ -1,28 +1,66 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { login } from "../utils/apis/auth";
 
 const Login = () => {
+  const link = useNavigate();
+
+  const [data, setData] = useState({
+    account_id: "",
+    password: "",
+  });
+  const { account_id, password } = data;
+
+  const onChange = e => {
+    let { name, value } = e.target;
+
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+  const resetValue = () => {
+    setData({
+      account_id: "",
+      password: "",
+    });
+  };
+
+  const onLogin = async () => {
+    try {
+      const res = await login(data);
+      link("/");
+      Cookie.set("accessToken", res.data.accessToken);
+    } catch (err) {
+      alert("로그인에 실패했습니다.");
+      console.log(err);
+      resetValue();
+    }
+  };
+
   return (
     <Wrapper>
       <Title>Log in</Title>
       <Form>
         <Input
-          // onChange={onChange}
-          name="id"
-          // value={email}
+          onChange={onChange}
+          name="account_id"
+          value={account_id}
           placeholder="ID"
           type="text"
           required
         />
         <Input
-          // onChange={onChange}
+          onChange={onChange}
           name="password"
-          // value={password}
+          value={password}
           placeholder="Password"
           type="password"
           required
         />
-        <Input type="submit" value="Login" />
+
+        <LoginBtn onClick={onLogin}>Login</LoginBtn>
       </Form>
       <Switcher>
         계정이 없으신가요? <Link to="/create-account">회원가입 &rarr;</Link>
@@ -69,10 +107,16 @@ const Input = styled.input`
   border: none;
   width: 100%;
   font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
+`;
+
+const LoginBtn = styled.button`
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
   }
 `;
