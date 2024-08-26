@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signUp } from "../utils/apis/auth";
-import { Cookie } from "../utils/function/cookie";
+import { Cookie } from "../utils/cookie";
 
 const CreateAccount = () => {
   const [data, setData] = useState({
@@ -11,17 +11,7 @@ const CreateAccount = () => {
     phone: "",
   });
   const link = useNavigate();
-  const onSignUp = async () => {
-    try {
-      const res = await signUp(data);
-      link("/login");
-      Cookie.set("accessToken", res.data.accessToken);
-    } catch (err) {
-      alert("회원가입에 실패했습니다.");
-      console.log(err);
-      resetValue();
-    }
-  };
+
   const { account_id, password, phone } = data;
 
   const onChange = e => {
@@ -32,7 +22,6 @@ const CreateAccount = () => {
       [name]: value,
     });
   };
-
   const resetValue = () => {
     setData({
       account_id: "",
@@ -40,11 +29,21 @@ const CreateAccount = () => {
       phone: "",
     });
   };
+  const onSignUp = async () => {
+    try {
+      const res = await signUp(data);
+      // link("/login");
+    } catch (err) {
+      alert("회원가입에 실패했습니다.");
+      console.log(err);
+      resetValue();
+    }
+  };
 
   return (
     <Wrapper>
       <Title>Join</Title>
-      <Form>
+      <Container>
         <Input
           onChange={onChange}
           name="account_id"
@@ -70,7 +69,7 @@ const CreateAccount = () => {
           required
         />
         <SignUpBtn onClick={onSignUp}>SignUp</SignUpBtn>
-      </Form>
+      </Container>
       <Switcher>
         이미 계정이 있으신가요? <Link to="/login">로그인 &rarr;</Link>
       </Switcher>
@@ -102,7 +101,7 @@ const Title = styled.h1`
   font-size: 42px;
 `;
 
-const Form = styled.form`
+const Container = styled.div`
   margin-top: 50px;
   margin-bottom: 10px;
   display: flex;
